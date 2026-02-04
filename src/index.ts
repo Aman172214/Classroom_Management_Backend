@@ -1,4 +1,5 @@
-import express from 'express';
+import "dotenv/config";
+import express from "express";
 
 const app = express();
 const PORT = 3000;
@@ -7,8 +8,8 @@ const PORT = 3000;
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Classroom Manager API' });
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to Classroom Manager API" });
 });
 
 // Start server
