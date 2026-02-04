@@ -6,7 +6,7 @@ import subjectsRouter from "./routes/subjects";
 const app = express();
 const PORT = 3000;
 
-if (process.env.FRONTEND_URL) {
+if (!process.env.FRONTEND_URL) {
   throw new Error("FRONTEND URL not found in .env");
 }
 
