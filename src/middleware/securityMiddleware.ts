@@ -25,10 +25,11 @@ const securityMiddleware = async (
       case "student":
         limit = 10;
         message = "User request limit exceeded (10 per minute). Please wait.";
+        break;
       default:
         limit = 5;
         message =
-          "Guest request limit exceeded (5 per minute). Please signup for highter limit.";
+          "Guest request limit exceeded (5 per minute). Please signup for higher limit.";
         break;
     }
     const client = aj.withRule(
@@ -62,7 +63,7 @@ const securityMiddleware = async (
         message: "Request blocked by security policy.",
       });
     }
-    if (decision.isDenied() && decision.reason.isBot()) {
+    if (decision.isDenied() && decision.reason.isRateLimit()) {
       return res.status(403).json({
         error: "Too many requests",
         message,
