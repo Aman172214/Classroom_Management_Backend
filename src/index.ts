@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import subjectsRouter from "./routes/subjects";
 import securityMiddleware from "./middleware/securityMiddleware";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth";
 
 const app = express();
 const PORT = 3000;
@@ -17,6 +19,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.all("/api/auth/*splat", toNodeHandler(auth));
 
 // Middleware
 app.use(express.json());
