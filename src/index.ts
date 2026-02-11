@@ -1,40 +1,46 @@
-import "dotenv/config";
-import express from "express";
 import cors from "cors";
-import subjectsRouter from "./routes/subjects";
-import securityMiddleware from "./middleware/securityMiddleware";
+import express from "express";
 import { toNodeHandler } from "better-auth/node";
-import { auth } from "./lib/auth";
+
+import subjectsRouter from "./routes/subjects.js";
+import usersRouter from "./routes/users.js";
+import classesRouter from "./routes/classes.js";
+import departmentsRouter from "./routes/departments.js";
+import statsRouter from "./routes/stats.js";
+import enrollmentsRouter from "./routes/enrollments.js";
+
+// import securityMiddleware from "./middleware/security.js";
+import { auth } from "./lib/auth.js";
+import securityMiddleware from "./middleware/securityMiddleware.js";
 
 const app = express();
-const PORT = 3000;
-
-if (!process.env.FRONTEND_URL) {
-  throw new Error("FRONTEND URL not found in .env");
-}
+const PORT = 8000;
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
+    origin: process.env.FRONTEND_URL, // React app URL
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+    credentials: true, // allow cookies
   }),
 );
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
-// Middleware
 app.use(express.json());
 
 app.use(securityMiddleware);
 
 app.use("/api/subjects", subjectsRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/classes", classesRouter);
+app.use("/api/departments", departmentsRouter);
+app.use("/api/stats", statsRouter);
+app.use("/api/enrollments", enrollmentsRouter);
 
-// Routes
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Classroom Manager API" });
+  res.send("Backend server is running!");
 });
 
-// Start server
 app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
